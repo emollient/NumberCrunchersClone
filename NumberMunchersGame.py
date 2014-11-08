@@ -4,16 +4,20 @@ from gi.repository import Gtk
 
 class Button:
 
-    def __init__(self, screen, x, y, width, height):
+    def __init__(self, screen, x, y, width, height, callback):
         self.screen = screen
 
-        self.hovered = False
-        self.pressed = False
+        #State is an "enum"
+        #0 is static, 1 is hovered, 2 is pressed, 3 is triggered (released after pressed while still hovered)
+        self.state = 0
 
         self.staticColor = (255,0,0)
         self.hoveredColor = (0,255,0)
         self.pressedColor = (0,0,255)
-        self.currentColor = self.staticColor
+
+        self.wasPressed = False
+
+        self.callback = callback
 
         self.rect = (x,y,width,height)
 
@@ -21,27 +25,42 @@ class Button:
         pos = event.pos
         button = 0
 
-        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             button = event.button
 
         if pos[0] > self.rect[0] and pos[0] < self.rect[0] + self.rect[2] and pos[1] > self.rect[1] and pos[1] < self.rect[1] + self.rect[3]:
-            self.currentColor = self.hoveredColor
+            self.state = 1 #Hovered
             if button == 1:
-                self.currentColor = self.pressedColor
+                self.state = 2 #Pressed
+                self.wasPressed = True
+            elif self.wasPressed and event.type == pygame.MOUSEBUTTONUP:
+                self.callback()
         else:
-            self.currentColor = self.staticColor
+            self.state = 0 #Static
 
     def draw(self):
-        pygame.draw.rect(self.screen, self.currentColor, self.rect)
+        #We can't use a swtich on the button state, but we can do a set of if/else statements
+        if self.state == 0:
+            pygame.draw.rect(self.screen, self.staticColor, self.rect)
+        elif self.state == 1:
+            pygame.draw.rect(self.screen, self.hoveredColor, self.rect)
+        elif self.state == 2:
+            pygame.draw.rect(self.screen, self.pressedColor, self.rect)
 
 class Menu:
 
     def __init__(self, screen):
         self.screen = screen
 
-        startButton = Button(screen, 200,200,100,100)
+        screenWidthHalf = screen.get_width()/2
+        screenHeightHalf = screen.get_height()/2
+
+        startButton = Button(screen, screenWidthHalf - 50, screenHeightHalf - 50,100,100, self.startGame)
 
         self.buttons = [startButton]
+
+    def startGame(self):
+        NumberMunchersGame.gameState = 1
 
     def events(self, event):
         for button in self.buttons:
@@ -52,6 +71,10 @@ class Menu:
             button.draw()
 
 class NumberMunchersGame:
+
+    #Game state determines where we are in the game
+    #0 is menu, 1 is game
+    gameState = 0
 
     def __init__(self):
         # Set up a clock for managing the frame rate.
@@ -85,10 +108,12 @@ class NumberMunchersGame:
             elif event.type == pygame.VIDEORESIZE:
                 pygame.display.set_mode(event.size, pygame.RESIZABLE)
 
-            #elif event.type == pygame.KEYDOWN:
+            if NumberMunchersGame.gameState == 0:
+                if event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+                    self.menu.events(event)
 
-            elif event.type == pygame.MOUSEMOTION or event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
-                self.menu.events(event)
+            elif NumberMunchersGame.gameState == 1:
+                print "test"
 
     #Update logic goes here
     def update(self):
@@ -101,11 +126,13 @@ class NumberMunchersGame:
         # Clear Display
         self.screen.fill((255, 255, 255))  # 255 for white
 
-        # Draw the menu
-        self.menu.draw()
+        if NumberMunchersGame.gameState == 0:
+            # Draw the menu
+            self.menu.draw()
 
-        # Draw the ball
-        pygame.draw.circle(self.screen, (255, 0, 0), (100, 100), 100)
+        elif NumberMunchersGame.gameState == 1:
+            # Draw the ball
+            pygame.draw.circle(self.screen, (255, 0, 0), (100, 100), 100)
 
         # Flip Display
         pygame.display.flip()

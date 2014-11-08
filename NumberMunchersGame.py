@@ -94,8 +94,6 @@ class NumberMunchersGame:
 	    #Handle rendering
             self.draw(screen)
 
-            
-
             # Try to stay at 30 FPS
             self.clock.tick(30)
 

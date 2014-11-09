@@ -37,9 +37,19 @@ class Player:
         self.points += points
 
     def events(self, event):
-        print event
-        if event.key == 97 or event.key == 276:
+        # Up
+        if event.key == 119 or event.key == 273:
+            print "up"
+
+        # Left
+        elif event.key == 97 or event.key == 276:
             self.state = 0
+
+        # Down
+        elif event.key == 115 or event.key == 274:
+            print "down"
+
+        # Right
         elif event.key == 100 or event.key == 275:
             self.state = 1
 

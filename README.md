@@ -14,7 +14,7 @@ a grid of squares containing a short numerical or word expression. The objective
 
 is to consume all and only the grids containing information satisfying a specific
 
-criterion (determined by the mode of play) while also avoiding the deadly "Troggle" 
+criterion (determined by the mode of play) while also avoiding the deadly dinosaur
 
 monsters which roamed the grid.
 

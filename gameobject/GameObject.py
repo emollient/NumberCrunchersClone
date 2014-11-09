@@ -1,7 +1,8 @@
 import pygame
 
 #player class
-class Player:
+import pygame
+class Player(pygame.sprite.Sprite):
 
     def __init__(self, screen):
         self.x = 0
@@ -49,6 +50,10 @@ class Player:
         elif self.state == 1:
             self.screen.blit(self.rightImage, self.rect)
 
+    def draw(self):
+        #definitely does stuff
+        return
+
 #list of enemies
 class Enemies:
 
@@ -67,12 +72,26 @@ class Enemies:
     def type(self):
         return self.type
 
+    def draw(self):
+        #definitely does stuff
+        return
+
 
 #available munchables
 class Munchables:
     #put the types of munchables here
 
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
         return self.x, self.y
+<<<<<<< HEAD
+
+    def draw(self):
+        #definitely does stuff
+        return
+
+
+=======
+>>>>>>> 992176e4befbf52c4c203468f7d1186ec50fef26

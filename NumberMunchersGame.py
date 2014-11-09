@@ -1,5 +1,7 @@
 #!/usr/bin/python
 import pygame
+import sys
+
 from gi.repository import Gtk
 
 class Button:
@@ -81,11 +83,15 @@ class Menu:
         screenHeightHalf = screen.get_height()/2
 
         startButton = Button(screen, self.startGame, screenWidthHalf, screenHeightHalf + 100, 0, 0, "StartGameButton")
+        exitButton = Button(screen, self.exitGame, screenWidthHalf, screenHeightHalf + 200, 0, 0, "ExitGameButton")
 
-        self.buttons = [startButton]
+        self.buttons = [startButton, exitButton]
 
     def startGame(self):
         NumberMunchersGame.gameState = 1
+    def exitGame(self):
+        pygame.quit()
+        sys.exit()
 
     def events(self, event):
         for button in self.buttons:

@@ -1,15 +1,35 @@
 #!/usr/bin/python
 import pygame
+import sys
+
 from gi.repository import Gtk
 
 class Button:
 
-    def __init__(self, screen, x, y, width, height, callback):
+    def __init__(self, screen, callback, x, y, width = 0, height = 0, imagePrefix = ""):
         self.screen = screen
 
         #State is an "enum"
         #0 is static, 1 is hovered, 2 is pressed, 3 is triggered (released after pressed while still hovered)
         self.state = 0
+
+        if not imagePrefix == "":
+            self.staticImage = pygame.image.load("res/img/" + imagePrefix + "Static.png")
+            self.hoveredImage = pygame.image.load("res/img/" + imagePrefix + "Hover.png")
+            self.pressedImage = pygame.image.load("res/img/" + imagePrefix + "Pressed.png")
+
+            width = self.staticImage.get_width()
+            height = self.staticImage.get_height()
+
+        else:
+            self.staticImage = None
+            self.hoveredImage = None
+            self.pressedImage = None
+
+        halfWidth = width / 2
+        halfHeight = height / 2
+
+        self.rect = (x - halfWidth, y - halfHeight, width , height)
 
         self.staticColor = (255,0,0)
         self.hoveredColor = (0,255,0)
@@ -18,8 +38,6 @@ class Button:
         self.wasPressed = False
 
         self.callback = callback
-
-        self.rect = (x,y,width,height)
 
     def events(self, event):
         pos = event.pos
@@ -41,11 +59,20 @@ class Button:
     def draw(self):
         #We can't use a swtich on the button state, but we can do a set of if/else statements
         if self.state == 0:
-            pygame.draw.rect(self.screen, self.staticColor, self.rect)
+            if self.staticImage:
+                self.screen.blit(self.staticImage, self.rect)
+            else:
+                pygame.draw.rect(self.screen, self.staticColor, self.rect)
         elif self.state == 1:
-            pygame.draw.rect(self.screen, self.hoveredColor, self.rect)
+            if self.hoveredImage:
+                self.screen.blit(self.hoveredImage, self.rect)
+            else:
+                pygame.draw.rect(self.screen, self.hoveredColor, self.rect)
         elif self.state == 2:
-            pygame.draw.rect(self.screen, self.pressedColor, self.rect)
+            if self.pressedImage:
+                self.screen.blit(self.pressedImage, self.rect)
+            else:
+                pygame.draw.rect(self.screen, self.pressedColor, self.rect)
 
 class Menu:
 
@@ -55,12 +82,16 @@ class Menu:
         screenWidthHalf = screen.get_width()/2
         screenHeightHalf = screen.get_height()/2
 
-        startButton = Button(screen, screenWidthHalf - 50, screenHeightHalf - 50,100,100, self.startGame)
+        startButton = Button(screen, self.startGame, screenWidthHalf, screenHeightHalf + 100, 0, 0, "StartGameButton")
+        exitButton = Button(screen, self.exitGame, screenWidthHalf, screenHeightHalf + 200, 0, 0, "ExitGameButton")
 
-        self.buttons = [startButton]
+        self.buttons = [startButton, exitButton]
 
     def startGame(self):
         NumberMunchersGame.gameState = 1
+    def exitGame(self):
+        pygame.quit()
+        sys.exit()
 
     def events(self, event):
         for button in self.buttons:

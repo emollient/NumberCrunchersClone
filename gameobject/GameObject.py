@@ -1,5 +1,6 @@
 #player class
-class Player:
+import pygame
+class Player(pygame.sprite.Sprite):
 
     def __init__(self):
         self.x = 0
@@ -16,6 +17,10 @@ class Player:
         self.x = x
         self.y = y
         self.points+= points
+
+    def draw(self):
+        #definitely does stuff
+        return
 
 #list of enemies
 class Enemies:
@@ -35,15 +40,23 @@ class Enemies:
     def type(self):
         return self.type
 
+    def draw(self):
+        #definitely does stuff
+        return
+
 
 #available munchables
 class Munchables:
     #put the types of munchables here
+
 
     def __init__(self, x, y):
         self.x = x
         self.y = y
         return self.x, self.y
 
+    def draw(self):
+        #definitely does stuff
+        return
 
 

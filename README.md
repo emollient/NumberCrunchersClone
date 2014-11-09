@@ -4,6 +4,7 @@ NumberMunchersClone
 Written for [OLPC](http://wiki.sugarlabs.org/go/Welcome_to_the_Sugar_Labs_wiki)
 
 Python version == 2.7.6
+
 Using [Pygame](http://www.pygame.org/wiki/about)
 
 #Rules for the game

@@ -17,8 +17,6 @@ class Board:
 			for y in xrange(0, self.cols):
 				self.boardArray[x].append(None)
 
-	# TODO: add drawing code for the board
-	# draw the background and lines
 	def draw(self):
 		# draw the background, just a rectangle for now
 		# to save memory we could maybe use screen.fill(color)

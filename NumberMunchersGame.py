@@ -3,6 +3,7 @@ import pygame
 import sys
 
 from board import board
+from gameobject.GameObject import Player
 
 from gi.repository import Gtk
 
@@ -116,9 +117,16 @@ class NumberMunchersGame:
         #Create the screen
         self.screen = pygame.display.get_surface()
 
+        #Create a main menu
         self.menu = Menu(self.screen)
 
+<<<<<<< HEAD
         self.board = Board(60, self.screen.get_width(), self.screen.get_height(), self.screen)
+=======
+        #Create some game objects
+        self.player = Player(self.screen)
+        self.player.set_position(50,50)
+>>>>>>> master
 
         self.paused = False
 
@@ -148,11 +156,11 @@ class NumberMunchersGame:
                     self.menu.events(event)
 
             elif NumberMunchersGame.gameState == 1:
-                print "test"
+                if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
+                    self.player.events(event)
 
     #Update logic goes here
     def update(self):
-        # Move the ball
         if not self.paused:
             return
 
@@ -161,14 +169,19 @@ class NumberMunchersGame:
         # Clear Display
         self.screen.fill((255, 255, 255))  # 255 for white
 
+        # Draw the menu
         if NumberMunchersGame.gameState == 0:
-            # Draw the menu
             self.menu.draw()
 
+        # Draw the game
         elif NumberMunchersGame.gameState == 1:
+<<<<<<< HEAD
             # Draw the ball
             # pygame.draw.circle(self.screen, (255, 0, 0), (100, 100), 100)
             board.draw();
+=======
+            self.player.draw()
+>>>>>>> master
 
         # Flip Display
         pygame.display.flip()

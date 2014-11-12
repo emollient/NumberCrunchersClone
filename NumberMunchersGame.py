@@ -2,10 +2,10 @@
 import pygame
 import sys
 
-from board import board
+import board
 from gameobject.GameObject import Player
 
-from gi.repository import Gtk
+#from gi.repository import Gtk
 
 class Button:
 
@@ -120,13 +120,12 @@ class NumberMunchersGame:
         #Create a main menu
         self.menu = Menu(self.screen)
 
-<<<<<<< HEAD
         self.board = Board(60, self.screen.get_width(), self.screen.get_height(), self.screen)
-=======
+
         #Create some game objects
         self.player = Player(self.screen)
         self.player.set_position(50,50)
->>>>>>> master
+
 
         self.paused = False
 
@@ -175,13 +174,12 @@ class NumberMunchersGame:
 
         # Draw the game
         elif NumberMunchersGame.gameState == 1:
-<<<<<<< HEAD
+
             # Draw the ball
             # pygame.draw.circle(self.screen, (255, 0, 0), (100, 100), 100)
             board.draw();
-=======
             self.player.draw()
->>>>>>> master
+
 
         # Flip Display
         pygame.display.flip()
@@ -192,8 +190,8 @@ class NumberMunchersGame:
 
         while self.running:
             # Pump GTK messages.
-            while Gtk.events_pending():
-                Gtk.main_iteration()
+            #while Gtk.events_pending():
+            #    Gtk.main_iteration()
 
             #Handle events
             self.events()

@@ -96,12 +96,7 @@ class Munchables:
         self.x = x
         self.y = y
         return self.x, self.y
-<<<<<<< HEAD
 
     def draw(self):
         #definitely does stuff
         return
-
-
-=======
->>>>>>> 992176e4befbf52c4c203468f7d1186ec50fef26

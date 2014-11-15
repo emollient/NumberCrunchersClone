@@ -7,6 +7,9 @@ Python version == 2.7.6
 
 Using [Pygame](http://www.pygame.org/wiki/about)
 
+#Link to wiki
+[GeoMunchers](http://wiki.sugarlabs.org/go/GeoMunchers)
+
 #Rules for the game
 
 In all the Munchers games, the player controlled a green "Muncher" character across 

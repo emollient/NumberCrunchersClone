@@ -92,12 +92,12 @@ class Player(GameObject):
 #Enemy class
 class Enemies(GameObject):
 
-    TREX = 1
-    APATASAUR = 2
+    TREX = 0
+    APATASAUR = 1
 
-    def __init__(self, screen, boardX, boardY, type = 1):
+    def __init__(self, screen, boardX, boardY, enemyType = 0):
         GameObject.__init__(self, screen, boardX, boardY)
-        self.type = self.TREX
+        self.type = enemyType
 
         #Load the enemy based on the type
 
@@ -105,18 +105,37 @@ class Enemies(GameObject):
         return self.type
 
     def draw(self):
-        return 0
-
-
+        #wil totally draw stuff later
+        return
 
 #available munchables
 class Munchables:
-    #put the types of munchables here
+    #Types of munchables
+    ANGLE_ACUTE = 0
+    ANGLE_RIGHT = 1
+    ANGLE_OBTUSE = 2
 
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        return self.x, self.y
+    POLYGON_TRIANGLE = 3
+    POLYGON_TRANGLE_RIGHT = 4
+    POLYGON_TRIANGLE_ISOSCELES = 5
+    POLYGON_TRIANGLE_EQUILATERAL = 6
+
+    POLYGON_SQUARE = 7
+    POLYGON_RECTANGLE = 8
+    POLYGON_4_SIDES = 9
+    POLYGON_5_SIDES = 10
+    POLYGON_6_SIDES = 11
+    POLYGON_7_SIDES = 12
+    POLYGON_8_SIDES = 13
+    POLYGON_9_SIDES = 14
+    POLYGON_10_SIDES = 15
+
+
+    def __init__(self, screen, boardX, boardY, munchableType = 0):
+        GameObject.__init__(self, screen, boardX, boardY)
+        self.type = munchableType
+
+        #Load image based on type
 
     def draw(self):
         #definitely does stuff

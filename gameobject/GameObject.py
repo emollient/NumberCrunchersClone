@@ -92,8 +92,10 @@ class Player(GameObject):
 #Enemy class
 class Enemies(GameObject):
 
-    TREX = 0
-    APATASAUR = 1
+    TRICERATOPS = 0
+    APATOSAURUS = 1
+    TREX = 2
+    RAPTOR = 3
 
     def __init__(self, screen, boardX, boardY, enemyType = 0):
         GameObject.__init__(self, screen, boardX, boardY)
@@ -111,24 +113,55 @@ class Enemies(GameObject):
 #available munchables
 class Munchables:
     #Types of munchables
+
+    #Angles
     ANGLE_ACUTE = 0
     ANGLE_RIGHT = 1
     ANGLE_OBTUSE = 2
 
-    POLYGON_TRIANGLE = 3
-    POLYGON_TRANGLE_RIGHT = 4
-    POLYGON_TRIANGLE_ISOSCELES = 5
-    POLYGON_TRIANGLE_EQUILATERAL = 6
+    #Triangles
+    TRIANGLE_EQUILATERAL = 3
+    TRIANGLE_ISOSCELES = 4
+    TRIANGLE_SCALENE = 5
+    TRIANGLE_RIGHT = 6
 
-    POLYGON_SQUARE = 7
-    POLYGON_RECTANGLE = 8
-    POLYGON_4_SIDES = 9
-    POLYGON_5_SIDES = 10
-    POLYGON_6_SIDES = 11
-    POLYGON_7_SIDES = 12
-    POLYGON_8_SIDES = 13
-    POLYGON_9_SIDES = 14
-    POLYGON_10_SIDES = 15
+    #Quadrilaterals
+    QUAD_SQUARE = 7
+    QUAD_RECTANGLE = 8
+    QUAD_TRAPEZOID = 9
+    QUAD_PARALLELOGRAMS = 10
+    QUAD_CONVEX = 11
+    QUAD_CONCAVE = 12
+
+    #Regular Polygons
+    REGULAR_PENTAGON = 13
+    REGULAR_HEXAGON = 14
+    REGULAR_HEPTAGON = 15
+    REGULAR_OCTAGON = 16
+    REGULAR_NONAGON = 17
+    REGULAR_DECAGON = 18
+    REGULAR_HENDECAGON = 19
+    REGULAR_DODECAGON = 20
+
+    #Irregular Convex Polygons
+    CONVEX_PENTAGON = 21
+    CONVEX_HEXAGON = 22
+    CONVEX_HEPTAGON = 23
+    CONVEX_OCTAGON = 24
+    CONVEX_NONAGON = 25
+    CONVEX_DECAGON = 26
+    CONVEX_HENDECAGON = 27
+    CONVEX_DODECAGON = 28
+
+    #Irregular Concave Polygons
+    CONCAVE_PENTAGON = 29
+    CONCAVE_HEXAGON = 30
+    CONCAVE_HEPTAGON = 31
+    CONCAVE_OCTAGON = 32
+    CONCAVE_NONAGON = 33
+    CONCAVE_DECAGON = 34
+    CONCAVE_HENDECAGON = 35
+    CONCAVE_DODECAGON = 36
 
 
     def __init__(self, screen, boardX, boardY, munchableType = 0):

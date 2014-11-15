@@ -123,8 +123,8 @@ class NumberMunchersGame:
         self.board = board.Board(60, self.screen.get_width(), self.screen.get_height(), self.screen)
 
         #Create some game objects
-        self.player = Player(self.screen)
-        self.player.set_position(50,50)
+        self.player = Player(self.screen, 0, 0)
+        self.player.set_screenPos(50,50)
 
 
         self.paused = False

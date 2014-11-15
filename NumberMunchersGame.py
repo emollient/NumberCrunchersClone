@@ -2,9 +2,10 @@
 import pygame
 import sys
 
+import board
 from gameobject.GameObject import Player
 
-from gi.repository import Gtk
+#from gi.repository import Gtk
 
 class Button:
 
@@ -59,7 +60,7 @@ class Button:
             self.state = 0 #Static
 
     def draw(self):
-        #We can't use a swtich on the button state, but we can do a set of if/else statements
+        #We can't use a switch on the button state, but we can do a set of if/else statements
         if self.state == 0:
             if self.staticImage:
                 self.screen.blit(self.staticImage, self.rect)
@@ -113,15 +114,18 @@ class NumberMunchersGame:
         # Set up a clock for managing the frame rate.
         self.clock = pygame.time.Clock()
 
-	    #Create the screen
+        #Create the screen
         self.screen = pygame.display.get_surface()
 
         #Create a main menu
         self.menu = Menu(self.screen)
 
+        self.board = Board(60, self.screen.get_width(), self.screen.get_height(), self.screen)
+
         #Create some game objects
         self.player = Player(self.screen)
         self.player.set_position(50,50)
+
 
         self.paused = False
 
@@ -170,7 +174,12 @@ class NumberMunchersGame:
 
         # Draw the game
         elif NumberMunchersGame.gameState == 1:
+
+            # Draw the ball
+            # pygame.draw.circle(self.screen, (255, 0, 0), (100, 100), 100)
+            board.draw();
             self.player.draw()
+
 
         # Flip Display
         pygame.display.flip()
@@ -181,8 +190,8 @@ class NumberMunchersGame:
 
         while self.running:
             # Pump GTK messages.
-            while Gtk.events_pending():
-                Gtk.main_iteration()
+            #while Gtk.events_pending():
+            #    Gtk.main_iteration()
 
             #Handle events
             self.events()
@@ -190,7 +199,7 @@ class NumberMunchersGame:
             #Handle game logic
             self.update()
 
-	        #Handle rendering
+            #Handle rendering
             self.draw()
 
             # Try to stay at 30 FPS

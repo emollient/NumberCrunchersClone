@@ -2,7 +2,7 @@
 import pygame
 import sys
 
-import board
+from board.Board import Board
 from gameobject.GameObject import Player
 
 #from gi.repository import Gtk
@@ -120,12 +120,12 @@ class NumberMunchersGame:
         #Create a main menu
         self.menu = Menu(self.screen)
 
-        self.board = board.Board(60, self.screen.get_width(), self.screen.get_height(), self.screen)
+        topLeft = {'x': 0, 'y': 0}
+        self.board = Board(topLeft, 60, self.screen.get_width(), self.screen.get_height(), self.screen)
 
         #Create some game objects
         self.player = Player(self.screen, 0, 0)
         self.player.set_screenPos(50,50)
-
 
         self.paused = False
 
@@ -174,12 +174,8 @@ class NumberMunchersGame:
 
         # Draw the game
         elif NumberMunchersGame.gameState == 1:
-
-            # Draw the ball
-            # pygame.draw.circle(self.screen, (255, 0, 0), (100, 100), 100)
             self.board.draw();
             self.player.draw()
-
 
         # Flip Display
         pygame.display.flip()

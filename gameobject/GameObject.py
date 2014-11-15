@@ -10,8 +10,8 @@ class Player:
 
         self.screen = screen
 
-        self.leftImage = pygame.image.load("res/img/PlayerLeft.png")
-        self.rightImage = pygame.image.load("res/img/PlayerRight.png")
+        self.leftImage = pygame.image.load("res/img/PlayerLeft.bmp")
+        self.rightImage = pygame.image.load("res/img/PlayerRight.bmp")
 
         self.width = self.leftImage.get_width()
         self.height = self.leftImage.get_height()

@@ -17,9 +17,9 @@ class Button:
         self.state = 0
 
         if not imagePrefix == "":
-            self.staticImage = pygame.image.load("res/img/" + imagePrefix + "Static.png")
-            self.hoveredImage = pygame.image.load("res/img/" + imagePrefix + "Hover.png")
-            self.pressedImage = pygame.image.load("res/img/" + imagePrefix + "Pressed.png")
+            self.staticImage = pygame.image.load("res/img/" + imagePrefix + "Static.bmp")
+            self.hoveredImage = pygame.image.load("res/img/" + imagePrefix + "Hover.bmp")
+            self.pressedImage = pygame.image.load("res/img/" + imagePrefix + "Pressed.bmp")
 
             width = self.staticImage.get_width()
             height = self.staticImage.get_height()
@@ -120,7 +120,7 @@ class NumberMunchersGame:
         #Create a main menu
         self.menu = Menu(self.screen)
 
-        self.board = Board(60, self.screen.get_width(), self.screen.get_height(), self.screen)
+        self.board = board.Board(60, self.screen.get_width(), self.screen.get_height(), self.screen)
 
         #Create some game objects
         self.player = Player(self.screen)
@@ -177,7 +177,7 @@ class NumberMunchersGame:
 
             # Draw the ball
             # pygame.draw.circle(self.screen, (255, 0, 0), (100, 100), 100)
-            board.draw();
+            self.board.draw();
             self.player.draw()
 
 

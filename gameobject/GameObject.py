@@ -15,7 +15,7 @@ class GameObject:
         self.drawRect = (self.screenRect['x'], self.screenRect['y'], self.screenRect['width'], self.screenRect['height'])
 
     def get_boardCoords(self):
-        return boardCoords
+        return self.boardCoords
 
     def get_screenRect(self):
         return self.screenRect
@@ -67,16 +67,14 @@ class Player(GameObject):
     #This should be moved to the board class
     def events(self, event):
         # Up
-        if event.key == 119 or event.key == 273:
-            print "up"
+        #if event.key == 119 or event.key == 273:
 
         # Left
-        elif event.key == 97 or event.key == 276:
+        if event.key == 97 or event.key == 276:
             self.state = 0
 
         # Down
-        elif event.key == 115 or event.key == 274:
-            print "down"
+        #elif event.key == 115 or event.key == 274:
 
         # Right
         elif event.key == 100 or event.key == 275:

@@ -124,9 +124,11 @@ class NumberMunchersGame:
         self.board = Board(topLeft, 60, self.screen.get_width(), self.screen.get_height(), self.screen)
 
         #Create some game objects
-        self.player = Player(self.screen, 0, 0)
-        self.player.set_screenPos(50,50)
+        player = Player(self.screen, 0, 0)
 
+        #Add objects to the board
+        self.board.addPlayer(player, 2, 2)
+        
         self.paused = False
 
     def set_paused(self, paused):
@@ -156,7 +158,7 @@ class NumberMunchersGame:
 
             elif NumberMunchersGame.gameState == 1:
                 if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
-                    self.player.events(event)
+                    self.board.events(event)
 
     #Update logic goes here
     def update(self):
@@ -175,7 +177,6 @@ class NumberMunchersGame:
         # Draw the game
         elif NumberMunchersGame.gameState == 1:
             self.board.draw();
-            self.player.draw()
 
         # Flip Display
         pygame.display.flip()

@@ -1,8 +1,9 @@
 import pygame
 
 class GameObject:
-    def __init__(self, screen, boardX, boardY):
-        self.screen = screen
+    def __init__(self, board, boardX, boardY):
+        self.board = board
+        self.screen = board.surface
 
         self.screenRect = {'x':0, 'y':0, 'width':0, 'height':0}
         self.boardCoords = {'x':boardX, 'y':boardY}
@@ -12,7 +13,9 @@ class GameObject:
 
     #update our drawRect object whenever the screenRect object is changed
     def update_drawRect(self):
-        self.drawRect = (self.screenRect['x'], self.screenRect['y'], self.screenRect['width'], self.screenRect['height'])
+        centerX = (self.boardCoords['x'] * self.board.cellWidth) + self.board.topLeft['x'] + (self.board.cellWidth / 2) - (self.screenRect['width']/2)
+        centerY = (self.boardCoords['y'] * self.board.cellHeight) + self.board.topLeft['y'] + (self.board.cellHeight / 2) - (self.screenRect['height']/2)
+        self.drawRect = (centerX, centerY, self.screenRect['width'], self.screenRect['height'])
 
     def get_boardCoords(self):
         return self.boardCoords
@@ -33,8 +36,6 @@ class GameObject:
     #base draw function; should be overwritten by super classes
     def draw(self):
         pygame.draw(self.screen, (0, 129, 69), drawRect)
-
-
 
 #player class
 class Player(GameObject):

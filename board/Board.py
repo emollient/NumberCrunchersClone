@@ -4,14 +4,18 @@ import pygame
 #from pygame import draw
 
 class Board:
-	def __init__(self, topLeft, cellSize, width, height, surface):
+	def __init__(self, topLeft, width, height, surface):
 		self.topLeft = topLeft
-		self.cellSize = cellSize
 		self.surface = surface
 		self.width = width
 		self.height = height
-		self.rows = self.height / self.cellSize
-		self.cols = self.width / self.cellSize
+
+		self.rows = 5
+		self.cols = 6
+
+		self.cellWidth = width/self.cols;
+		self.cellHeight = height / self.rows;
+
 		self.boardArray = []
 		for x in xrange(0, self.rows):
 			self.boardArray.append([])
@@ -44,8 +48,8 @@ class Board:
 	def calcScreenPos(self, x, y):
 		screenPos = {'x': 0, 'y': 0}
 
-		screenX = (x * self.cellSize)
-		screenY = (y * self.cellSize)
+		screenX = (x * self.cellWidth)
+		screenY = (y * self.cellHeight)
 
 		screenPos['x'] = screenX
 		screenPos['y'] = screenY
@@ -86,15 +90,15 @@ class Board:
 		originX = self.topLeft['x']
 		originY = self.topLeft['y']
 		background = pygame.Rect(originX, originY, self.width, self.height)
-		bgColor = pygame.Color(16, 64, 222)
-		black = pygame.Color(0,0,0)
+		bgColor = pygame.Color(0, 0, 0)
+		lineColor = pygame.Color(255,0,255)
 		pygame.draw.rect(self.surface, bgColor, background, 0)
 
 		# draw grid lines
-		for x in xrange(0, self.cols):
-			pygame.draw.line(self.surface, black, (x * self.cellSize, originY), (x * self.cellSize, originY + self.height), 2)
-		for y in xrange(0, self.rows):
-			pygame.draw.line(self.surface, black, (originX, y * self.cellSize), (originX + self.width, y * self.cellSize), 2)
+		for x in xrange(0, self.cols + 1):
+			pygame.draw.line(self.surface, lineColor, ((x * self.cellWidth) + originX, originY), ((x * self.cellWidth) + originX, originY + self.height), 2)
+		for y in xrange(0, self.rows + 1):
+			pygame.draw.line(self.surface, lineColor, (originX, (y * self.cellHeight) + originY), (originX + self.width, (y * self.cellHeight) + originY), 2)
 
 		# Draw everything stored on the board
 		for x in xrange(0, self.rows):

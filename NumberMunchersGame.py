@@ -4,6 +4,7 @@ import sys
 
 from board.Board import Board
 from gameobject.GameObject import Player
+from level.Level import Level
 
 #from gi.repository import Gtk
 
@@ -122,6 +123,14 @@ class NumberMunchersGame:
 
         topLeft = {'x': 40, 'y': 120}
         self.board = Board(topLeft, self.screen.get_width() - (topLeft['x'] * 2), self.screen.get_height() - (topLeft['y'] * 2), self.screen)
+
+        #Create levels
+        self.levelOne = Level(self.board, [1], [0,2], 6)
+
+        #Setup Level One
+        levelOneMunchables = self.levelOne.generateMunchables()
+        for i in range(0, len(levelOneMunchables)):
+            self.board.addMunchable(levelOneMunchables[i])
 
         #Create some game objects
         player = Player(self.board, 0, 0)

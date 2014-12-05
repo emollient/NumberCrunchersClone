@@ -17,9 +17,9 @@ class Board:
 		self.cellHeight = height / self.rows;
 
 		self.boardArray = []
-		for x in xrange(0, self.rows):
+		for x in range(0, self.cols):
 			self.boardArray.append([])
-			for y in xrange(0, self.cols):
+			for y in range(0, self.rows):
 				self.boardArray[x].append([])
 
 	#Sets a game object as the player
@@ -32,6 +32,14 @@ class Board:
 		self.setPosition(gameObject, x, y)
 
 		self.boardArray[x][y].append(gameObject)
+
+	#Adds an object to the board assuming the object knows where it should be already
+	def addMunchable(self, gameObject):
+		boardCoords = gameObject.get_boardCoords();
+		x = boardCoords['x']
+		y = boardCoords['y']
+
+		self.addGameObject(gameObject, x, y)
 
 	def setPosition(self, gameObject, x, y):
 		if x > self.cols or y > self.rows or x < 0 or y < 0:
@@ -101,8 +109,8 @@ class Board:
 			pygame.draw.line(self.surface, lineColor, (originX, (y * self.cellHeight) + originY), (originX + self.width, (y * self.cellHeight) + originY), 2)
 
 		# Draw everything stored on the board
-		for x in xrange(0, self.rows):
-			for y in xrange(0, self.cols):
+		for x in xrange(0, self.cols):
+			for y in xrange(0, self.rows):
 				for i in xrange(0, len(self.boardArray[x][y])):
 					self.boardArray[x][y][i].draw()
 

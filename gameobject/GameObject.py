@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class GameObject:
     def __init__(self, board, boardX, boardY):
@@ -35,7 +36,7 @@ class GameObject:
 
     #base draw function; should be overwritten by super classes
     def draw(self):
-        pygame.draw(self.screen, (0, 129, 69), drawRect)
+        pygame.drawRect(self.screen, (0, 129, 69), self.drawRect)
 
 #player class
 class Player(GameObject):
@@ -96,8 +97,8 @@ class Enemies(GameObject):
     TREX = 2
     RAPTOR = 3
 
-    def __init__(self, screen, boardX, boardY, enemyType = 0):
-        GameObject.__init__(self, screen, boardX, boardY)
+    def __init__(self, board, boardX, boardY, enemyType = 0):
+        GameObject.__init__(self, board, boardX, boardY)
         self.type = enemyType
 
         #Load the enemy based on the type
@@ -110,7 +111,7 @@ class Enemies(GameObject):
         return
 
 #available munchables
-class Munchables:
+class Munchable(GameObject):
     #Types of munchables
 
     #Angles
@@ -163,12 +164,26 @@ class Munchables:
     CONCAVE_DODECAGON = 36
 
 
-    def __init__(self, screen, boardX, boardY, munchableType = 0):
-        GameObject.__init__(self, screen, boardX, boardY)
+    def __init__(self, board, boardX, boardY, munchableType = 0):
+        GameObject.__init__(self, board, boardX, boardY)
         self.type = munchableType
 
+        self.image = None
+
         #Load image based on type
+        if munchableType == Munchable.ANGLE_ACUTE:
+            number = random.randint(0,3);
+            self.image = pygame.image.load("res/img/AngleAcute"+str(number)+".bmp")
+        elif munchableType == Munchable.ANGLE_RIGHT:
+            self.image = pygame.image.load("res/img/AngleRight0.bmp")
+        elif munchableType == Munchable.ANGLE_OBTUSE:
+            number = random.randint(0,3);
+            self.image = pygame.image.load("res/img/AngleObtuse"+str(number)+".bmp")
+
+        self.screenRect['width'] = self.image.get_width()
+        self.screenRect['height'] = self.image.get_height()
+
+        self.drawRect = (self.screenRect['x'], self.screenRect['y'], self.screenRect['width'], self.screenRect['height'])
 
     def draw(self):
-        #definitely does stuff
-        return
+        self.screen.blit(self.image, self.drawRect)

@@ -4,6 +4,7 @@ import sys
 
 from board.Board import Board
 from gameobject.GameObject import Player
+from level.Level import Level
 
 #from gi.repository import Gtk
 
@@ -120,15 +121,23 @@ class NumberMunchersGame:
         #Create a main menu
         self.menu = Menu(self.screen)
 
-        topLeft = {'x': 0, 'y': 0}
-        self.board = Board(topLeft, 60, self.screen.get_width(), self.screen.get_height(), self.screen)
+        topLeft = {'x': 40, 'y': 120}
+        self.board = Board(topLeft, self.screen.get_width() - (topLeft['x'] * 2), self.screen.get_height() - (topLeft['y'] * 2), self.screen)
+
+        #Create levels
+        self.levelOne = Level(self.board, [1], [0,2], 6)
+
+        #Setup Level One
+        levelOneMunchables = self.levelOne.generateMunchables()
+        for i in range(0, len(levelOneMunchables)):
+            self.board.addMunchable(levelOneMunchables[i])
 
         #Create some game objects
-        player = Player(self.screen, 0, 0)
+        player = Player(self.board, 0, 0)
 
         #Add objects to the board
         self.board.addPlayer(player, 2, 2)
-        
+
         self.paused = False
 
     def set_paused(self, paused):
@@ -168,7 +177,7 @@ class NumberMunchersGame:
     #Rendering logic goes here
     def draw(self):
         # Clear Display
-        self.screen.fill((255, 255, 255))  # 255 for white
+        self.screen.fill((0, 0, 0))
 
         # Draw the menu
         if NumberMunchersGame.gameState == 0:
@@ -207,7 +216,7 @@ class NumberMunchersGame:
 # ./NumberMunchersGame.py
 def main():
     pygame.init()
-    pygame.display.set_mode((600, 480), pygame.RESIZABLE)
+    pygame.display.set_mode((1200, 900), pygame.RESIZABLE)
     game = NumberMunchersGame()
     game.run()
 

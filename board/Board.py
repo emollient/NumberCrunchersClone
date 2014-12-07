@@ -4,18 +4,22 @@ import pygame
 #from pygame import draw
 
 class Board:
-	def __init__(self, topLeft, cellSize, width, height, surface):
+	def __init__(self, topLeft, width, height, surface):
 		self.topLeft = topLeft
-		self.cellSize = cellSize
 		self.surface = surface
 		self.width = width
 		self.height = height
-		self.rows = self.height / self.cellSize
-		self.cols = self.width / self.cellSize
+
+		self.rows = 5
+		self.cols = 6
+
+		self.cellWidth = width/self.cols;
+		self.cellHeight = height / self.rows;
+
 		self.boardArray = []
-		for x in xrange(0, self.rows):
+		for x in range(0, self.cols):
 			self.boardArray.append([])
-			for y in xrange(0, self.cols):
+			for y in range(0, self.rows):
 				self.boardArray[x].append([])
 
 	#Sets a game object as the player
@@ -28,6 +32,14 @@ class Board:
 		self.setPosition(gameObject, x, y)
 
 		self.boardArray[x][y].append(gameObject)
+
+	#Adds an object to the board assuming the object knows where it should be already
+	def addMunchable(self, gameObject):
+		boardCoords = gameObject.get_boardCoords();
+		x = boardCoords['x']
+		y = boardCoords['y']
+
+		self.addGameObject(gameObject, x, y)
 
 	def setPosition(self, gameObject, x, y):
 		if x > self.cols or y > self.rows or x < 0 or y < 0:
@@ -44,8 +56,8 @@ class Board:
 	def calcScreenPos(self, x, y):
 		screenPos = {'x': 0, 'y': 0}
 
-		screenX = (x * self.cellSize)
-		screenY = (y * self.cellSize)
+		screenX = (x * self.cellWidth)
+		screenY = (y * self.cellHeight)
 
 		screenPos['x'] = screenX
 		screenPos['y'] = screenY
@@ -86,19 +98,19 @@ class Board:
 		originX = self.topLeft['x']
 		originY = self.topLeft['y']
 		background = pygame.Rect(originX, originY, self.width, self.height)
-		bgColor = pygame.Color(16, 64, 222)
-		black = pygame.Color(0,0,0)
+		bgColor = pygame.Color(0, 0, 0)
+		lineColor = pygame.Color(255,0,255)
 		pygame.draw.rect(self.surface, bgColor, background, 0)
 
 		# draw grid lines
-		for x in xrange(0, self.cols):
-			pygame.draw.line(self.surface, black, (x * self.cellSize, originY), (x * self.cellSize, originY + self.height), 2)
-		for y in xrange(0, self.rows):
-			pygame.draw.line(self.surface, black, (originX, y * self.cellSize), (originX + self.width, y * self.cellSize), 2)
+		for x in xrange(0, self.cols + 1):
+			pygame.draw.line(self.surface, lineColor, ((x * self.cellWidth) + originX, originY), ((x * self.cellWidth) + originX, originY + self.height), 2)
+		for y in xrange(0, self.rows + 1):
+			pygame.draw.line(self.surface, lineColor, (originX, (y * self.cellHeight) + originY), (originX + self.width, (y * self.cellHeight) + originY), 2)
 
 		# Draw everything stored on the board
-		for x in xrange(0, self.rows):
-			for y in xrange(0, self.cols):
+		for x in xrange(0, self.cols):
+			for y in xrange(0, self.rows):
 				for i in xrange(0, len(self.boardArray[x][y])):
 					self.boardArray[x][y][i].draw()
 

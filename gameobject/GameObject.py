@@ -1,8 +1,10 @@
 import pygame
+import random
 
 class GameObject:
-    def __init__(self, screen, boardX, boardY):
-        self.screen = screen
+    def __init__(self, board, boardX, boardY):
+        self.board = board
+        self.screen = board.surface
 
         self.screenRect = {'x':0, 'y':0, 'width':0, 'height':0}
         self.boardCoords = {'x':boardX, 'y':boardY}
@@ -12,7 +14,9 @@ class GameObject:
 
     #update our drawRect object whenever the screenRect object is changed
     def update_drawRect(self):
-        self.drawRect = (self.screenRect['x'], self.screenRect['y'], self.screenRect['width'], self.screenRect['height'])
+        centerX = (self.boardCoords['x'] * self.board.cellWidth) + self.board.topLeft['x'] + (self.board.cellWidth / 2) - (self.screenRect['width']/2)
+        centerY = (self.boardCoords['y'] * self.board.cellHeight) + self.board.topLeft['y'] + (self.board.cellHeight / 2) - (self.screenRect['height']/2)
+        self.drawRect = (centerX, centerY, self.screenRect['width'], self.screenRect['height'])
 
     def get_boardCoords(self):
         return self.boardCoords
@@ -32,9 +36,7 @@ class GameObject:
 
     #base draw function; should be overwritten by super classes
     def draw(self):
-        pygame.draw(self.screen, (0, 129, 69), drawRect)
-
-
+        pygame.drawRect(self.screen, (0, 129, 69), self.drawRect)
 
 #player class
 class Player(GameObject):
@@ -95,8 +97,8 @@ class Enemies(GameObject):
     TREX = 2
     RAPTOR = 3
 
-    def __init__(self, screen, boardX, boardY, enemyType = 0):
-        GameObject.__init__(self, screen, boardX, boardY)
+    def __init__(self, board, boardX, boardY, enemyType = 0):
+        GameObject.__init__(self, board, boardX, boardY)
         self.type = enemyType
 
         #Load the enemy based on the type
@@ -109,7 +111,7 @@ class Enemies(GameObject):
         return
 
 #available munchables
-class Munchables:
+class Munchable(GameObject):
     #Types of munchables
 
     #Angles
@@ -162,12 +164,26 @@ class Munchables:
     CONCAVE_DODECAGON = 36
 
 
-    def __init__(self, screen, boardX, boardY, munchableType = 0):
-        GameObject.__init__(self, screen, boardX, boardY)
+    def __init__(self, board, boardX, boardY, munchableType = 0):
+        GameObject.__init__(self, board, boardX, boardY)
         self.type = munchableType
 
+        self.image = None
+
         #Load image based on type
+        if munchableType == Munchable.ANGLE_ACUTE:
+            number = random.randint(0,3);
+            self.image = pygame.image.load("res/img/AngleAcute"+str(number)+".bmp")
+        elif munchableType == Munchable.ANGLE_RIGHT:
+            self.image = pygame.image.load("res/img/AngleRight0.bmp")
+        elif munchableType == Munchable.ANGLE_OBTUSE:
+            number = random.randint(0,3);
+            self.image = pygame.image.load("res/img/AngleObtuse"+str(number)+".bmp")
+
+        self.screenRect['width'] = self.image.get_width()
+        self.screenRect['height'] = self.image.get_height()
+
+        self.drawRect = (self.screenRect['x'], self.screenRect['y'], self.screenRect['width'], self.screenRect['height'])
 
     def draw(self):
-        #definitely does stuff
-        return
+        self.screen.blit(self.image, self.drawRect)

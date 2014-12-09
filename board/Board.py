@@ -1,7 +1,7 @@
 import pygame
-#from pygame import Rect
-#from pygame import Color
-#from pygame import draw
+
+from gameobject.GameObject import Munchable
+#from level.Level import Level
 
 class Board:
 	def __init__(self, topLeft, width, height, surface):
@@ -9,6 +9,7 @@ class Board:
 		self.surface = surface
 		self.width = width
 		self.height = height
+		self.level = None
 
 		self.rows = 5
 		self.cols = 6
@@ -41,6 +42,9 @@ class Board:
 
 		self.addGameObject(gameObject, x, y)
 
+	def setNewLevel(self, level):
+		self.level = level;
+
 	def setPosition(self, gameObject, x, y):
 		if x > self.cols or y > self.rows or x < 0 or y < 0:
 			print "Position " + str(x) + " : " + str(y) +" off board"
@@ -70,6 +74,9 @@ class Board:
 		playerPos = self.player.get_boardCoords()
 
 		if event.type == pygame.KEYDOWN:
+			# use this to find key values
+			# print(event.key)
+
 			# Up
 			if event.key == 119 or event.key == 273:
 				if playerPos['y'] > 0:
@@ -89,6 +96,15 @@ class Board:
 			elif event.key == 100 or event.key == 275:
 				if playerPos['x']  < self.cols - 1:
 					self.setPosition(self.player, playerPos['x'] + 1, playerPos['y'])
+
+			# Space - Munching
+			elif event.key == 32:
+				playerX = playerPos['x']
+				playerY = playerPos['y']
+				if(isinstance(self.boardArray[playerX][playerY][0], Munchable)):
+					if self.boardArray[playerX][playerY][0].type in self.level.goodMunchableTypes:
+						# I decided to use del instead of pop() here since I don't think we need the munchable after it's been eaten
+						del self.boardArray[playerX][playerY][0]
 
 		self.player.events(event)
 

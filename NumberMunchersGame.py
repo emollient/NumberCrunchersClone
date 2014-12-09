@@ -121,11 +121,15 @@ class NumberMunchersGame:
         #Create a main menu
         self.menu = Menu(self.screen)
 
+        #Create the game board 
         topLeft = {'x': 40, 'y': 120}
         self.board = Board(topLeft, self.screen.get_width() - (topLeft['x'] * 2), self.screen.get_height() - (topLeft['y'] * 2), self.screen)
 
         #Create levels
         self.levelOne = Level(self.board, [1], [0,2], 6)
+
+        #Let the board know about the new level
+        self.board.setNewLevel(self.levelOne)
 
         #Setup Level One
         levelOneMunchables = self.levelOne.generateMunchables()

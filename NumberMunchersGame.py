@@ -126,9 +126,9 @@ class NumberMunchersGame:
         self.board = Board(topLeft, self.screen.get_width() - (topLeft['x'] * 2), self.screen.get_height() - (topLeft['y'] * 2), self.screen)
 
         #Create levels
-        self.levelOne = Level(self.board, [1], [0,2], 6)
-        self.levelTwo = Level(self.board, [0], [1,2], 10)
-        self.levelThree = Level(self.board, [2], [0,1], 12)
+        self.levelOne = Level(self.board, "Right Angles", [1], [0,2], 6)
+        self.levelTwo = Level(self.board, "Acute Angles", [0], [1,2], 10)
+        self.levelThree = Level(self.board, "Obtuse Angles", [2], [0,1], 12)
 
         #Set and generate the level
         self.board.setNewLevel(self.levelOne)

@@ -12,6 +12,8 @@ class Board:
 		self.level = None
 		self.player = None
 
+		self.titleFont = pygame.font.SysFont("Monospace", 72)
+
 		self.rows = 5
 		self.cols = 6
 
@@ -61,8 +63,6 @@ class Board:
 		if len(self.boardArray[boardX][boardY]) > 0:
 			munchable = self.boardArray[boardX][boardY][0]
 
-			print munchable
-
 			if(munchable != None and isinstance(munchable, Munchable)):
 				if munchable.type in self.level.goodMunchableTypes:
 					# I decided to use del instead of pop() here since I don't think we need the munchable after it's been eaten
@@ -90,6 +90,13 @@ class Board:
 
 		for i in range(0, len(levelMunchables)):
 			self.addMunchable(levelMunchables[i])
+
+		self.levelText = self.titleFont.render(self.level.getLevelName(), 1, (255,255,255))
+
+		levelTextX = self.surface.get_width()/2 - self.levelText.get_width()/2
+		levelTextY = self.topLeft['y']/2 - self.levelText.get_height()/2
+
+		self.levelTextCoords = (levelTextX, levelTextY)
 
 	def setPosition(self, gameObject, x, y):
 		if x > self.cols or y > self.rows or x < 0 or y < 0:
@@ -173,6 +180,10 @@ class Board:
 			for y in xrange(0, self.rows):
 				for i in xrange(0, len(self.boardArray[x][y])):
 					self.boardArray[x][y][i].draw()
+
+	    #Draw level title text
+		self.surface.blit(self.levelText, self.levelTextCoords);
+
 
 	# TODO: get the immediate neighbors for a given cell, should be useful for enemy AI
 	def getNeighbors(self, xIndex, yIndex):

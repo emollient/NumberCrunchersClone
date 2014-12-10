@@ -5,8 +5,10 @@ class Level:
 
     Levels = []
 
-    def __init__(self, screen, goodMunchableTypes, badMunchableTypes, numOfGoodMunchables):
+    def __init__(self, screen, levelName, goodMunchableTypes, badMunchableTypes, numOfGoodMunchables):
         self.screen = screen;
+
+        self.levelName = levelName
 
         self.goodMunchableTypes = goodMunchableTypes
         self.badMunchableTypes = badMunchableTypes
@@ -16,8 +18,11 @@ class Level:
 
         self.index = len(Level.Levels) - 1
 
+    def getLevelName(self):
+        return self.levelName
+
     def getIndex(self):
-        return self.index;
+        return self.index
 
     def getNumOfGoodMunchables(self):
         return self.numOfGoodMunchables

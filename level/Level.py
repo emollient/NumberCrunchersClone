@@ -5,8 +5,10 @@ class Level:
 
     Levels = []
 
-    def __init__(self, screen, goodMunchableTypes, badMunchableTypes, numOfGoodMunchables):
+    def __init__(self, screen, levelName, goodMunchableTypes, badMunchableTypes, numOfGoodMunchables):
         self.screen = screen;
+
+        self.levelName = levelName
 
         self.goodMunchableTypes = goodMunchableTypes
         self.badMunchableTypes = badMunchableTypes
@@ -15,6 +17,15 @@ class Level:
         Level.Levels.append(self)
 
         self.index = len(Level.Levels) - 1
+
+    def getLevelName(self):
+        return self.levelName
+
+    def getIndex(self):
+        return self.index
+
+    def getNumOfGoodMunchables(self):
+        return self.numOfGoodMunchables
 
     #Generates and returns a list of munchables for the level
     #based on the given criteria
@@ -35,6 +46,8 @@ class Level:
                     goodType = self.goodMunchableTypes[whichGood]
 
                     nextMunchable = Munchable(self.screen, x, y, goodType)
+
+                    goodMunchablesCreated += 1
                 else:
                     whichBad = random.randint(0,len(self.badMunchableTypes) - 1)
                     badType = self.badMunchableTypes[whichBad]

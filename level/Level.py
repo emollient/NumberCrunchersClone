@@ -16,6 +16,12 @@ class Level:
 
         self.index = len(Level.Levels) - 1
 
+    def getIndex(self):
+        return self.index;
+
+    def getNumOfGoodMunchables(self):
+        return self.numOfGoodMunchables
+
     #Generates and returns a list of munchables for the level
     #based on the given criteria
     #This assumes that there are 30 spaces to fill
@@ -35,6 +41,8 @@ class Level:
                     goodType = self.goodMunchableTypes[whichGood]
 
                     nextMunchable = Munchable(self.screen, x, y, goodType)
+
+                    goodMunchablesCreated += 1
                 else:
                     whichBad = random.randint(0,len(self.badMunchableTypes) - 1)
                     badType = self.badMunchableTypes[whichBad]

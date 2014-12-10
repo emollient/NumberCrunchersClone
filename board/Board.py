@@ -1,7 +1,7 @@
 import pygame
 
 from gameobject.GameObject import Munchable
-#from level.Level import Level
+from level.Level import Level
 
 class Board:
 	def __init__(self, topLeft, width, height, surface):
@@ -10,6 +10,7 @@ class Board:
 		self.width = width
 		self.height = height
 		self.level = None
+		self.player = None
 
 		self.rows = 5
 		self.cols = 6
@@ -22,6 +23,19 @@ class Board:
 			self.boardArray.append([])
 			for y in range(0, self.rows):
 				self.boardArray[x].append([])
+
+	#Clears the board; helpful for cleaning up and switching levels
+	def clearBoard(self):
+		for x in range(0, self.cols):
+			for y in range(0, self.rows):
+				if(len(self.boardArray[x][y]) > 0):
+					if(isinstance(self.boardArray[x][y][0], Munchable)):
+						del self.boardArray[x][y][0]
+
+		if(self.player != None):
+			self.setPosition(self.player, self.cols/2, self.rows/2)
+
+		self.removedMunchables = 0
 
 	#Sets a game object as the player
 	def addPlayer(self, gameObject, x, y):
@@ -42,8 +56,40 @@ class Board:
 
 		self.addGameObject(gameObject, x, y)
 
+	def removeMunchable(self, boardX, boardY):
+
+		if len(self.boardArray[boardX][boardY]) > 0:
+			munchable = self.boardArray[boardX][boardY][0]
+
+			print munchable
+
+			if(munchable != None and isinstance(munchable, Munchable)):
+				if munchable.type in self.level.goodMunchableTypes:
+					# I decided to use del instead of pop() here since I don't think we need the munchable after it's been eaten
+					del self.boardArray[boardX][boardY][0]
+
+					#Count how many munchables we've removed this level
+					self.removedMunchables += 1
+
+					#If we've removed as many as exist in the level, move to the next level
+					if(self.removedMunchables >= self.level.getNumOfGoodMunchables()):
+						if len(Level.Levels) > (self.level.getIndex() + 1):
+							nextLevel = Level.Levels[self.level.getIndex() + 1]
+							self.setNewLevel(nextLevel)
+						else:
+							#Game is completed or create random challenge level
+							return
+
+
 	def setNewLevel(self, level):
 		self.level = level;
+
+		self.clearBoard()
+
+		levelMunchables = self.level.generateMunchables()
+
+		for i in range(0, len(levelMunchables)):
+			self.addMunchable(levelMunchables[i])
 
 	def setPosition(self, gameObject, x, y):
 		if x > self.cols or y > self.rows or x < 0 or y < 0:
@@ -101,10 +147,8 @@ class Board:
 			elif event.key == 32:
 				playerX = playerPos['x']
 				playerY = playerPos['y']
-				if(isinstance(self.boardArray[playerX][playerY][0], Munchable)):
-					if self.boardArray[playerX][playerY][0].type in self.level.goodMunchableTypes:
-						# I decided to use del instead of pop() here since I don't think we need the munchable after it's been eaten
-						del self.boardArray[playerX][playerY][0]
+
+				self.removeMunchable(playerX, playerY);
 
 		self.player.events(event)
 

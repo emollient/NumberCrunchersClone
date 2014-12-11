@@ -45,6 +45,7 @@ class Player(GameObject):
         GameObject.__init__(self, screen, boardX, boardY)
 
         self.points = 0
+        self.lives = 3
 
         self.leftImage = pygame.image.load("res/img/PlayerLeft.bmp")
         self.rightImage = pygame.image.load("res/img/PlayerRight.bmp")
@@ -60,11 +61,26 @@ class Player(GameObject):
         # State for which way to face; 0 is left, 1 is right
         self.state = 0
 
-    def get_points(self):
+    def getLivesImage(self):
+        return self.leftImage
+
+    def getPoints(self):
         return self.points
 
-    def add_points(self, points):
+    def addPoints(self, points):
         self.points += points
+
+    def setPoints(self, points):
+        self.points = points
+
+    def getLives(self):
+        return self.lives
+
+    def setLives(self, lives):
+        self.lives = lives
+
+    def removeLife(self):
+        self.lives -= 1
 
     #This should be moved to the board class
     def events(self, event):

@@ -12,12 +12,15 @@ class Board:
 		self.level = None
 		self.player = None
 
+		self.reset = False
+
 		self.requireContinue = False
 		self.endOfGame = False;
 
 		self.titleFont = pygame.font.SysFont("Monospace", 72)
 		self.indexFont = pygame.font.SysFont("Monospace", 48)
 		self.continueFont = pygame.font.SysFont("Monospace", 32)
+		self.scoreFont = pygame.font.SysFont("Monospace", 38)
 
 		self.rows = 5
 		self.cols = 6
@@ -35,6 +38,12 @@ class Board:
 		self.continueText = self.continueFont.render("Press Enter To Continue!", 1, (0,255,0))
 		self.continueCoords = (self.surface.get_width()/2 - self.continueText.get_width()/2, self.surface.get_height() - self.topLeft['y'] + 6)
 
+		self.endText = self.continueFont.render("Game Over! Press Enter to go back to the main menu.", 1, (0,255,0))
+		self.endCoords = (self.surface.get_width()/2 - self.endText.get_width()/2, self.surface.get_height() - self.topLeft['y'] + 6)
+
+		self.scoreText = self.scoreFont.render("Score: 0", 1, (255,255,255))
+		self.scoreCoords = (self.topLeft['x'], self.surface.get_height() - self.topLeft['y']/2 - self.scoreText.get_height()/2)
+
 	#Clears the board; helpful for cleaning up and switching levels
 	def clearBoard(self):
 		for x in range(0, self.cols):
@@ -46,8 +55,18 @@ class Board:
 		if(self.player != None):
 			self.setPosition(self.player, self.cols/2, self.rows/2)
 
-
 		self.removedMunchables = 0
+
+	def getReset(self):
+		return self.reset
+
+	def resetBoard(self):
+		self.reset = False
+		self.requireContinue = False
+		self.endOfGame = False;
+
+		self.player.setLives(3)
+		self.player.setPoints(0)
 
 	#Sets a game object as the player
 	def addPlayer(self, gameObject, x, y):
@@ -81,6 +100,10 @@ class Board:
 					#Count how many munchables we've removed this level
 					self.removedMunchables += 1
 
+					#Increment score and update score display
+					self.player.addPoints(20 + (5 * self.level.getIndex()))
+					self.scoreText = self.scoreFont.render("Score: " + str(self.player.getPoints()), 1, (255, 255, 255))
+
 					#If we've removed as many as exist in the level, move to the next level
 					if(self.removedMunchables >= self.level.getNumOfGoodMunchables()):
 						if len(Level.Levels) > (self.level.getIndex() + 1):
@@ -88,6 +111,13 @@ class Board:
 						else:
 							#Game is completed or create random challenge level
 							self.endOfGame = True
+				else:
+					#We ate the wrong munchable :(
+					self.player.removeLife()
+
+					if self.player.getLives() < 0:
+						self.endOfGame = True
+
 
 	def setNewLevel(self, level):
 		self.level = level;
@@ -174,6 +204,9 @@ class Board:
 				self.setNewLevel(nextLevel)
 				self.requireContinue = False
 
+			elif self.endOfGame and event.key == 13:
+				self.reset = True
+
 		self.player.events(event)
 
 	def draw(self):
@@ -203,9 +236,20 @@ class Board:
 	    #Draw level title text
 		self.surface.blit(self.levelText, self.levelTextCoords)
 		self.surface.blit(self.levelIndexText, self.levelIndexCoords)
+		self.surface.blit(self.scoreText, self.scoreCoords)
 
 		if self.requireContinue:
 			self.surface.blit(self.continueText, self.continueCoords)
+		elif self.endOfGame:
+			self.surface.blit(self.endText, self.endCoords)
+
+		#Draw lives
+		imageWidth = self.player.getLivesImage().get_width()
+		livesX = self.surface.get_width() - (imageWidth * self.player.getLives()) - (20 * self.player.getLives())
+		livesY = self.surface.get_height() - self.topLeft['y']/2 - self.player.getLivesImage().get_height()/2
+		for i in range(0, self.player.getLives()):
+			lifeX = livesX + (imageWidth * i) - (5 * i)
+			self.surface.blit(self.player.getLivesImage(), (lifeX, livesY))
 
 	# TODO: get the immediate neighbors for a given cell, should be useful for enemy AI
 	def getNeighbors(self, xIndex, yIndex):

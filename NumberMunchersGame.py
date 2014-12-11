@@ -4,6 +4,7 @@ import sys
 
 from board.Board import Board
 from gameobject.GameObject import Player
+from gameobject.GameObject import Munchable
 from level.Level import Level
 
 #from gi.repository import Gtk
@@ -126,9 +127,9 @@ class NumberMunchersGame:
         self.board = Board(topLeft, self.screen.get_width() - (topLeft['x'] * 2), self.screen.get_height() - (topLeft['y'] * 2), self.screen)
 
         #Create levels
-        self.levelOne = Level(self.board, "Right Angles", [1], [0,2], 6)
-        self.levelTwo = Level(self.board, "Acute Angles", [0], [1,2], 10)
-        self.levelThree = Level(self.board, "Obtuse Angles", [2], [0,1], 12)
+        self.levelOne = Level(self.board, "Right Angles", [Munchable.ANGLE_RIGHT], [Munchable.ANGLE_ACUTE,Munchable.ANGLE_OBTUSE], 6)
+        self.levelTwo = Level(self.board, "Acute Angles", [Munchable.ANGLE_ACUTE], [Munchable.ANGLE_RIGHT,Munchable.ANGLE_OBTUSE], 10)
+        self.levelThree = Level(self.board, "Obtuse Angles", [Munchable.ANGLE_OBTUSE], [Munchable.ANGLE_ACUTE,Munchable.ANGLE_RIGHT], 12)
 
         #Set and generate the level
         self.board.setNewLevel(self.levelOne)
@@ -188,6 +189,11 @@ class NumberMunchersGame:
 
         # Flip Display
         pygame.display.flip()
+
+        if self.board.getReset():
+            NumberMunchersGame.gameState = 0
+            self.board.setNewLevel(self.levelOne)
+            self.board.resetBoard()
 
     # The main game loop.
     def run(self):

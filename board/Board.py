@@ -12,7 +12,12 @@ class Board:
 		self.level = None
 		self.player = None
 
+		self.requireContinue = False
+		self.endOfGame = False;
+
 		self.titleFont = pygame.font.SysFont("Monospace", 72)
+		self.indexFont = pygame.font.SysFont("Monospace", 48)
+		self.continueFont = pygame.font.SysFont("Monospace", 32)
 
 		self.rows = 5
 		self.cols = 6
@@ -26,6 +31,10 @@ class Board:
 			for y in range(0, self.rows):
 				self.boardArray[x].append([])
 
+		#Create some static images
+		self.continueText = self.continueFont.render("Press Enter To Continue!", 1, (0,255,0))
+		self.continueCoords = (self.surface.get_width()/2 - self.continueText.get_width()/2, self.surface.get_height() - self.topLeft['y'] + 6)
+
 	#Clears the board; helpful for cleaning up and switching levels
 	def clearBoard(self):
 		for x in range(0, self.cols):
@@ -37,12 +46,13 @@ class Board:
 		if(self.player != None):
 			self.setPosition(self.player, self.cols/2, self.rows/2)
 
+
 		self.removedMunchables = 0
 
 	#Sets a game object as the player
 	def addPlayer(self, gameObject, x, y):
 		self.player = gameObject;
-		self.addGameObject(gameObject, x, y)
+		self.setPosition(gameObject, x, y)
 
 	#Adds an object to the board at a given position
 	def addGameObject(self, gameObject, x, y):
@@ -74,12 +84,10 @@ class Board:
 					#If we've removed as many as exist in the level, move to the next level
 					if(self.removedMunchables >= self.level.getNumOfGoodMunchables()):
 						if len(Level.Levels) > (self.level.getIndex() + 1):
-							nextLevel = Level.Levels[self.level.getIndex() + 1]
-							self.setNewLevel(nextLevel)
+							self.requireContinue = True
 						else:
 							#Game is completed or create random challenge level
-							return
-
+							self.endOfGame = True
 
 	def setNewLevel(self, level):
 		self.level = level;
@@ -91,12 +99,15 @@ class Board:
 		for i in range(0, len(levelMunchables)):
 			self.addMunchable(levelMunchables[i])
 
+		#Setup text
 		self.levelText = self.titleFont.render(self.level.getLevelName(), 1, (255,255,255))
+		self.levelIndexText = self.indexFont.render("Level: " + str(self.level.getIndex() + 1), 1, (255,255,255))
 
 		levelTextX = self.surface.get_width()/2 - self.levelText.get_width()/2
 		levelTextY = self.topLeft['y']/2 - self.levelText.get_height()/2
 
 		self.levelTextCoords = (levelTextX, levelTextY)
+		self.levelIndexCoords = (self.topLeft['x'], self.topLeft['y']/2 - self.levelIndexText.get_height()/2)
 
 	def setPosition(self, gameObject, x, y):
 		if x > self.cols or y > self.rows or x < 0 or y < 0:
@@ -128,34 +139,40 @@ class Board:
 
 		if event.type == pygame.KEYDOWN:
 			# use this to find key values
-			# print(event.key)
+			#print(event.key)
 
-			# Up
-			if event.key == 119 or event.key == 273:
-				if playerPos['y'] > 0:
-					self.setPosition(self.player, playerPos['x'], playerPos['y'] - 1)
+			if self.requireContinue == False and self.endOfGame == False:
+				# Up
+				if event.key == 119 or event.key == 273:
+					if playerPos['y'] > 0:
+						self.setPosition(self.player, playerPos['x'], playerPos['y'] - 1)
 
-			# Left
-			elif event.key == 97 or event.key == 276:
-				if playerPos['x'] > 0:
-					self.setPosition(self.player, playerPos['x'] - 1, playerPos['y'])
+				# Left
+				elif event.key == 97 or event.key == 276:
+					if playerPos['x'] > 0:
+						self.setPosition(self.player, playerPos['x'] - 1, playerPos['y'])
 
-			# Down
-			elif event.key == 115 or event.key == 274:
-				if playerPos['y'] < self.rows - 1:
-					self.setPosition(self.player, playerPos['x'], playerPos['y'] + 1)
+				# Down
+				elif event.key == 115 or event.key == 274:
+					if playerPos['y'] < self.rows - 1:
+						self.setPosition(self.player, playerPos['x'], playerPos['y'] + 1)
 
-			# Right
-			elif event.key == 100 or event.key == 275:
-				if playerPos['x']  < self.cols - 1:
-					self.setPosition(self.player, playerPos['x'] + 1, playerPos['y'])
+				# Right
+				elif event.key == 100 or event.key == 275:
+					if playerPos['x']  < self.cols - 1:
+						self.setPosition(self.player, playerPos['x'] + 1, playerPos['y'])
 
-			# Space - Munching
-			elif event.key == 32:
-				playerX = playerPos['x']
-				playerY = playerPos['y']
+				# Space - Munching
+				elif event.key == 32:
+					playerX = playerPos['x']
+					playerY = playerPos['y']
 
-				self.removeMunchable(playerX, playerY);
+					self.removeMunchable(playerX, playerY);
+
+			elif self.requireContinue and event.key == 13:
+				nextLevel = Level.Levels[self.level.getIndex() + 1]
+				self.setNewLevel(nextLevel)
+				self.requireContinue = False
 
 		self.player.events(event)
 
@@ -181,9 +198,14 @@ class Board:
 				for i in xrange(0, len(self.boardArray[x][y])):
 					self.boardArray[x][y][i].draw()
 
-	    #Draw level title text
-		self.surface.blit(self.levelText, self.levelTextCoords);
+		self.player.draw()
 
+	    #Draw level title text
+		self.surface.blit(self.levelText, self.levelTextCoords)
+		self.surface.blit(self.levelIndexText, self.levelIndexCoords)
+
+		if self.requireContinue:
+			self.surface.blit(self.continueText, self.continueCoords)
 
 	# TODO: get the immediate neighbors for a given cell, should be useful for enemy AI
 	def getNeighbors(self, xIndex, yIndex):

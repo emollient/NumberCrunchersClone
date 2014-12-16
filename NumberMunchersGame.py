@@ -106,10 +106,61 @@ class Menu:
         for button in self.buttons:
             button.draw()
 
+class InstructionScreen:
+
+    def __init__(self, screen):
+        self.screen = screen
+        self.instructions = []
+        self.coords = []
+
+        displayFont = pygame.font.SysFont("Monospace", 32)
+
+        #Create some instructions
+        instruction1 = "Press the arrow keys to move!"
+        instruction2 = "Press space to munch!"
+        instruction3 = "Make sure to only munch shapes that match the rule!"
+        instruction4 = "Watch out for dinosaur enemies!"
+        instruction5 = "Press Enter to Start!"
+
+        instructionText1 = displayFont.render(instruction1, 1, (0, 255, 0))
+        instructionCoords1 = (self.screen.get_width()/2 - instructionText1.get_width()/2, 100)
+        self.instructions.append(instructionText1)
+        self.coords.append(instructionCoords1)
+
+        instructionText2 = displayFont.render(instruction2, 1, (0, 255, 0))
+        instructionCoords2 = (self.screen.get_width()/2 - instructionText2.get_width()/2, 200)
+        self.instructions.append(instructionText2)
+        self.coords.append(instructionCoords2)
+
+        instructionText3 = displayFont.render(instruction3, 1, (0, 255, 0))
+        instructionCoords3 = (self.screen.get_width()/2 - instructionText3.get_width()/2, 300)
+        self.instructions.append(instructionText3)
+        self.coords.append(instructionCoords3)
+
+        instructionText4 = displayFont.render(instruction4, 1, (0, 255, 0))
+        instructionCoords4 = (self.screen.get_width()/2 - instructionText4.get_width()/2, 400)
+        self.instructions.append(instructionText4)
+        self.coords.append(instructionCoords4)
+
+        instructionText5 = displayFont.render(instruction5, 1, (0, 255, 0))
+        instructionCoords5 = (self.screen.get_width()/2 - instructionText5.get_width()/2, 500)
+        self.instructions.append(instructionText5)
+        self.coords.append(instructionCoords5)
+
+    def events(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == 13:
+                NumberMunchersGame.gameState = 2;
+
+    def draw(self):
+        for x in range(0, len(self.instructions)):
+            self.screen.blit(self.instructions[x], self.coords[x])
+
+
 class NumberMunchersGame:
 
     #Game state determines where we are in the game
-    #0 is menu, 1 is game
+    #0 is menu, 1 is instructions screen, 2 is game
     gameState = 0
 
     def __init__(self):
@@ -121,6 +172,9 @@ class NumberMunchersGame:
 
         #Create a main menu
         self.menu = Menu(self.screen)
+
+        #Create the instruction screen
+        self.instructionScreen = InstructionScreen(self.screen)
 
         #Create the game board
         topLeft = {'x': 40, 'y': 120}
@@ -167,6 +221,10 @@ class NumberMunchersGame:
 
             elif NumberMunchersGame.gameState == 1:
                 if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
+                    self.instructionScreen.events(event)
+
+            elif NumberMunchersGame.gameState == 2:
+                if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                     self.board.events(event)
 
     #Update logic goes here
@@ -183,8 +241,12 @@ class NumberMunchersGame:
         if NumberMunchersGame.gameState == 0:
             self.menu.draw()
 
-        # Draw the game
+         # Draw the instructions screen
         elif NumberMunchersGame.gameState == 1:
+            self.instructionScreen.draw();
+
+        # Draw the game
+        elif NumberMunchersGame.gameState == 2:
             self.board.draw();
 
         # Flip Display

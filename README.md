@@ -1,4 +1,4 @@
-NumberMunchersClone
+GeoMunchers
 ====================
 
 Written for [OLPC](http://wiki.sugarlabs.org/go/Welcome_to_the_Sugar_Labs_wiki)
@@ -12,19 +12,36 @@ Using [Pygame](http://www.pygame.org/wiki/about)
 
 #Rules for the game
 
-In all the Munchers games, the player controlled a green "Muncher" character across 
+Using W+S+A+D or the arrow keys, a player character traverses the grid
 
-a grid of squares containing a short numerical or word expression. The objective 
+and munches (using space) munchables that fit the objective listed. The player
 
-is to consume all and only the grids containing information satisfying a specific
+advances in level once all objective munchables have been munched. The player loses a 
 
-criterion (determined by the mode of play) while also avoiding the deadly dinosaur
-
-monsters which roamed the grid.
+life if they eat the wrong munchable. 
 
 #HowTo install
 
 [http://wiki.sugarlabs.org/go/Downloads](http://wiki.sugarlabs.org/go/Downloads)
+
+Clone the repository into its own directory
+
+```
+git clone https://github.com/emollient/NumberMunchersClone.git
+cd NumberMunchersClone
+```
+
+Install the requirements
+
+```
+pip install -r requirements.txt
+```
+
+Run game 
+
+```
+python NumberMunchersGame.py
+```
 
 #HowTo contribute
 
@@ -32,4 +49,5 @@ Make an issue or a pull request, we'll review and merge
 
 #Attribution
 
+[logo]: https://github.com/emollient/NumberMunchersClone/blob/master/activity/geoicon.svg “GeoMunchers logo”
 Icon graphic by Mateo Zlatar from The Noun Project

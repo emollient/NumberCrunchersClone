@@ -47,8 +47,8 @@ class Player(GameObject):
         self.points = 0
         self.lives = 3
 
-        self.leftImage = pygame.image.load("res/img/PlayerLeft.bmp")
-        self.rightImage = pygame.image.load("res/img/PlayerRight.bmp")
+        self.leftImage = pygame.image.load("res/img/PlayerLeft2.bmp")
+        self.rightImage = pygame.image.load("res/img/PlayerRight2.bmp")
 
         self.screenRect['width'] = self.leftImage.get_width()
         self.screenRect['height'] = self.leftImage.get_height()

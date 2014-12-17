@@ -49,5 +49,5 @@ Make an issue or a pull request, we'll review and merge
 
 #Attribution
 
-[Geomuncher Logo](https://github.com/emollient/NumberMunchersClone/blob/master/activity/geoicon.svg)
+![Geomuncher Logo](https://github.com/emollient/NumberMunchersClone/blob/master/activity/geoicon.svg)
 Icon graphic by Mateo Zlatar from The Noun Project
